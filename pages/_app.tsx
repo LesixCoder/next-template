@@ -1,6 +1,61 @@
-import '../styles/globals.css'
-import type { AppProps } from 'next/app'
+import type { AppProps, AppContext } from 'next/app';
+import App from 'next/app';
+import { Layout, ILayoutProps } from '@/components/layout';
+import Head from 'next/head';
+import axios from 'axios';
+import { ThemeContextProvider } from '@/stores/theme';
+import { UserAgentProvider } from '@/stores/userAgent';
+import { LanguageContextProvider } from '@/stores/language';
+import { Compose } from '@/stores/compose';
+import { LOCAL_BASE_URL, isMobile, isSupportWebp } from '@/utils';
+import './global.scss';
 
-export default function App({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />
+export interface IComponentProps {
+    isMobile?: boolean;
+    isSupportWebp?: boolean;
 }
+
+const _App = (data: AppProps & ILayoutProps & { isMobile: boolean; isSupportWebp: boolean }) => {
+    const { Component, pageProps, navbarData, footerData, isMobile, isSupportWebp } = data;
+
+    return (
+        <div>
+            <Head>
+                <title>{`A Demo for 《SSR 实战：官网开发指南》(${
+                    isMobile ? '移动端' : 'pc端'
+                })`}</title>
+                <meta
+                    name="description"
+                    content={`A Demo for 《深入浅出SSR官网开发指南》(${
+                        isMobile ? '移动端' : 'pc端'
+                    })`}
+                />
+                <link rel="icon" href="/favicon.ico" />
+            </Head>
+            <Compose
+                components={[
+                    [LanguageContextProvider],
+                    [ThemeContextProvider],
+                    [UserAgentProvider],
+                    [Layout, { navbarData, footerData }],
+                ]}
+            >
+                <Component {...pageProps} isMobile={isMobile} isSupportWebp={isSupportWebp} />
+            </Compose>
+        </div>
+    );
+};
+
+_App.getInitialProps = async (context: AppContext) => {
+    const pageProps = await App.getInitialProps(context);
+    const { data = {} } = await axios.get(`${LOCAL_BASE_URL}/api/layout`);
+
+    return {
+        ...pageProps,
+        ...data,
+        isMobile: isMobile(context),
+        isSupportWebp: isSupportWebp(context),
+    };
+};
+
+export default _App;

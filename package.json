@@ -1,22 +1,42 @@
 {
-  "name": "my-app",
+  "name": "next-template",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "debugger": "cross-env NODE_OPTIONS='--inspect' next dev"
   },
   "dependencies": {
     "@types/node": "18.11.9",
     "@types/react": "18.0.25",
     "@types/react-dom": "18.0.9",
+    "antd": "^5.0.1",
+    "axios": "^1.2.0",
+    "classnames": "^2.3.2",
     "eslint": "8.28.0",
     "eslint-config-next": "13.0.5",
+    "lodash": "^4.17.21",
     "next": "13.0.5",
+    "next-connect": "^0.13.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "showdown": "^2.1.0",
     "typescript": "4.9.3"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^17.3.0",
+    "@commitlint/config-conventional": "^17.3.0",
+    "@ls-lint/ls-lint": "^1.11.2",
+    "@types/lodash": "^4.14.190",
+    "cross-env": "^7.0.3",
+    "cz-conventional-changelog": "^3.3.0",
+    "husky": "^8.0.2",
+    "lint-staged": "^13.0.3",
+    "prettier": "^2.8.0",
+    "sass": "^1.56.1",
+    "typescript-plugin-css-modules": "^3.4.0"
   }
 }
